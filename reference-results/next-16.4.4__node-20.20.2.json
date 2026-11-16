@@ -1,0 +1,662 @@
+{
+  "meta": {
+    "next": "16.4.4",
+    "node": "20.20.2",
+    "platform": "linux/x64",
+    "cpus": 2,
+    "date": "2026-11-13T05:20:20.821Z",
+    "buildExitCode": 0,
+    "caseCount": 54
+  },
+  "cases": [
+    {
+      "id": "p-string",
+      "group": "primitive",
+      "desc": "'a' vs 'b'",
+      "status": "SEPARATE",
+      "aSeen": "string:a",
+      "bSeen": "string:b",
+      "bShouldSee": "string:b"
+    },
+    {
+      "id": "p-number",
+      "group": "primitive",
+      "desc": "1 vs 2",
+      "status": "SEPARATE",
+      "aSeen": "number:1",
+      "bSeen": "number:2",
+      "bShouldSee": "number:2"
+    },
+    {
+      "id": "p-neg-zero",
+      "group": "primitive",
+      "desc": "0 vs -0",
+      "status": "SEPARATE",
+      "aSeen": "number:0",
+      "bSeen": "number:0",
+      "bShouldSee": "number:0"
+    },
+    {
+      "id": "p-nan-inf",
+      "group": "primitive",
+      "desc": "NaN vs Infinity",
+      "status": "SEPARATE",
+      "aSeen": "number:NaN",
+      "bSeen": "number:Infinity",
+      "bShouldSee": "number:Infinity"
+    },
+    {
+      "id": "p-bigint",
+      "group": "primitive",
+      "desc": "1n vs 2n",
+      "status": "SEPARATE",
+      "aSeen": "bigint:1",
+      "bSeen": "bigint:2",
+      "bShouldSee": "bigint:2"
+    },
+    {
+      "id": "p-bool",
+      "group": "primitive",
+      "desc": "true vs false",
+      "status": "SEPARATE",
+      "aSeen": "boolean:true",
+      "bSeen": "boolean:false",
+      "bShouldSee": "boolean:false"
+    },
+    {
+      "id": "p-null-undefined",
+      "group": "primitive",
+      "desc": "null vs undefined",
+      "status": "SEPARATE",
+      "aSeen": "null",
+      "bSeen": "undefined",
+      "bShouldSee": "undefined"
+    },
+    {
+      "id": "p-str-vs-num",
+      "group": "primitive",
+      "desc": "'1' vs 1",
+      "status": "SEPARATE",
+      "aSeen": "string:1",
+      "bSeen": "number:1",
+      "bShouldSee": "number:1"
+    },
+    {
+      "id": "p-undefined-vs-string",
+      "group": "primitive",
+      "desc": "undefined vs the string '$undefined'",
+      "status": "SEPARATE",
+      "aSeen": "undefined",
+      "bSeen": "string:$undefined",
+      "bShouldSee": "string:$undefined"
+    },
+    {
+      "id": "o-value",
+      "group": "object",
+      "desc": "{a:1} vs {a:2}",
+      "status": "SEPARATE",
+      "aSeen": "Object keys=a json={\"a\":1}",
+      "bSeen": "Object keys=a json={\"a\":2}",
+      "bShouldSee": "Object keys=a json={\"a\":2}"
+    },
+    {
+      "id": "o-key-order",
+      "group": "object",
+      "desc": "{a,b} vs {b,a} (same data, key order swapped)",
+      "status": "SEPARATE",
+      "aSeen": "Object keys=a,b json={\"a\":1,\"b\":2}",
+      "bSeen": "Object keys=b,a json={\"b\":2,\"a\":1}",
+      "bShouldSee": "Object keys=b,a json={\"b\":2,\"a\":1}"
+    },
+    {
+      "id": "o-undefined-prop",
+      "group": "object",
+      "desc": "{a:1,b:undefined} vs {a:1}",
+      "status": "SEPARATE",
+      "aSeen": "Object keys=a json={\"a\":1}",
+      "bSeen": "Object keys=a json={\"a\":1}",
+      "bShouldSee": "Object keys=a json={\"a\":1}"
+    },
+    {
+      "id": "o-shared-ref",
+      "group": "object",
+      "desc": "{x:r,y:r} (one shared reference) vs {x:{..},y:{..}} (two equal copies)",
+      "status": "SEPARATE",
+      "aSeen": "Object keys=x,y json={\"x\":{\"k\":1},\"y\":{\"k\":1}} x===y:true",
+      "bSeen": "Object keys=x,y json={\"x\":{\"k\":1},\"y\":{\"k\":1}} x===y:false",
+      "bShouldSee": "Object keys=x,y json={\"x\":{\"k\":1},\"y\":{\"k\":1}} x===y:false"
+    },
+    {
+      "id": "o-nested",
+      "group": "object",
+      "desc": "{a:{b:{c:1}}} vs {a:{b:{c:2}}}",
+      "status": "SEPARATE",
+      "aSeen": "Object keys=a json={\"a\":{\"b\":{\"c\":1}}}",
+      "bSeen": "Object keys=a json={\"a\":{\"b\":{\"c\":2}}}",
+      "bShouldSee": "Object keys=a json={\"a\":{\"b\":{\"c\":2}}}"
+    },
+    {
+      "id": "o-null-proto",
+      "group": "object",
+      "desc": "plain {a:1} vs Object.create(null) with a:1",
+      "status": "SEPARATE",
+      "aSeen": "Object keys=a json={\"a\":1}",
+      "bSeen": "read threw: Cannot access toString on the server. You cannot dot into a temporary client reference fro",
+      "bShouldSee": "NullProto keys=a json={\"a\":1}"
+    },
+    {
+      "id": "o-array-order",
+      "group": "object",
+      "desc": "[1,2] vs [2,1]",
+      "status": "SEPARATE",
+      "aSeen": "Array json=[1,2] keys=0,1",
+      "bSeen": "Array json=[2,1] keys=0,1",
+      "bShouldSee": "Array json=[2,1] keys=0,1"
+    },
+    {
+      "id": "o-array-hole",
+      "group": "object",
+      "desc": "[1,<hole>,3] vs [1,undefined,3]",
+      "status": "SHARED",
+      "aSeen": "Array json=[1,null,3] keys=0,1,2",
+      "bSeen": "Array json=[1,null,3] keys=0,1,2",
+      "bShouldSee": "Array json=[1,null,3] keys=0,1,2"
+    },
+    {
+      "id": "o-array-vs-obj",
+      "group": "object",
+      "desc": "[1] vs {0:1}",
+      "status": "SEPARATE",
+      "aSeen": "Array json=[1] keys=0",
+      "bSeen": "Object keys=0 json={\"0\":1}",
+      "bShouldSee": "Object keys=0 json={\"0\":1}"
+    },
+    {
+      "id": "o-empty",
+      "group": "object",
+      "desc": "{} vs []",
+      "status": "SEPARATE",
+      "aSeen": "Object keys= json={}",
+      "bSeen": "Array json=[] keys=",
+      "bShouldSee": "Array json=[] keys="
+    },
+    {
+      "id": "b-date",
+      "group": "builtin",
+      "desc": "Date(1000) vs Date(2000)",
+      "status": "SEPARATE",
+      "aSeen": "Date 1000",
+      "bSeen": "Date 2000",
+      "bShouldSee": "Date 2000"
+    },
+    {
+      "id": "b-map-value",
+      "group": "builtin",
+      "desc": "Map k=1 vs Map k=2",
+      "status": "SEPARATE",
+      "aSeen": "Map [[\"k\",1]]",
+      "bSeen": "Map [[\"k\",2]]",
+      "bShouldSee": "Map [[\"k\",2]]"
+    },
+    {
+      "id": "b-map-order",
+      "group": "builtin",
+      "desc": "Map insertion order swapped",
+      "status": "SEPARATE",
+      "aSeen": "Map [[\"a\",1],[\"b\",2]]",
+      "bSeen": "Map [[\"b\",2],[\"a\",1]]",
+      "bShouldSee": "Map [[\"b\",2],[\"a\",1]]"
+    },
+    {
+      "id": "b-set-value",
+      "group": "builtin",
+      "desc": "Set ['x'] vs Set ['y']",
+      "status": "SEPARATE",
+      "aSeen": "Set [\"x\"]",
+      "bSeen": "Set [\"y\"]",
+      "bShouldSee": "Set [\"y\"]"
+    },
+    {
+      "id": "b-set-order",
+      "group": "builtin",
+      "desc": "Set insertion order swapped",
+      "status": "SEPARATE",
+      "aSeen": "Set [1,2]",
+      "bSeen": "Set [2,1]",
+      "bShouldSee": "Set [2,1]"
+    },
+    {
+      "id": "b-formdata",
+      "group": "builtin",
+      "desc": "FormData a=1 vs a=2",
+      "status": "SEPARATE",
+      "aSeen": "FormData [[\"a\",\"1\"]]",
+      "bSeen": "FormData [[\"a\",\"2\"]]",
+      "bShouldSee": "FormData [[\"a\",\"2\"]]"
+    },
+    {
+      "id": "b-formdata-order",
+      "group": "builtin",
+      "desc": "FormData entry order swapped",
+      "status": "SEPARATE",
+      "aSeen": "FormData [[\"a\",\"1\"],[\"b\",\"2\"]]",
+      "bSeen": "FormData [[\"b\",\"2\"],[\"a\",\"1\"]]",
+      "bShouldSee": "FormData [[\"b\",\"2\"],[\"a\",\"1\"]]"
+    },
+    {
+      "id": "b-url",
+      "group": "builtin",
+      "desc": "URL 'http://x.test/a' vs '/b' (docs list URL as unsupported)",
+      "status": "SEPARATE",
+      "aSeen": "string:http://x.test/a",
+      "bSeen": "string:http://x.test/b",
+      "bShouldSee": "URL keys= json=\"http://x.test/b\""
+    },
+    {
+      "id": "b-urlsearchparams",
+      "group": "builtin",
+      "desc": "URLSearchParams a=1 vs a=2",
+      "status": "SEPARATE",
+      "aSeen": "Array json=[[\"a\",\"1\"]] keys=0",
+      "bSeen": "Array json=[[\"a\",\"2\"]] keys=0",
+      "bShouldSee": "URLSearchParams keys= json={}"
+    },
+    {
+      "id": "t-u8-bytes",
+      "group": "typed",
+      "desc": "Uint8Array(16) filled with 1 vs 2",
+      "status": "SEPARATE",
+      "aSeen": "Uint8Array length=16 byteLength=16 head=[1,1,1,1] tail=[1,1]",
+      "bSeen": "Uint8Array length=16 byteLength=16 head=[2,2,2,2] tail=[2,2]",
+      "bShouldSee": "Uint8Array length=16 byteLength=16 head=[2,2,2,2] tail=[2,2]"
+    },
+    {
+      "id": "t-u8-last-byte",
+      "group": "typed",
+      "desc": "Uint8Array(200000) differing only in the LAST byte",
+      "status": "SEPARATE",
+      "aSeen": "Uint8Array length=200000 byteLength=200000 head=[1,1,1,1] tail=[1,1]",
+      "bSeen": "Uint8Array length=200000 byteLength=200000 head=[1,1,1,1] tail=[1,2]",
+      "bShouldSee": "Uint8Array length=200000 byteLength=200000 head=[1,1,1,1] tail=[1,2]"
+    },
+    {
+      "id": "t-u8-vs-i8",
+      "group": "typed",
+      "desc": "Uint8Array vs Int8Array, same bytes",
+      "status": "SEPARATE",
+      "aSeen": "Uint8Array length=16 byteLength=16 head=[31,31,31,31] tail=[31,31]",
+      "bSeen": "Int8Array length=16 byteLength=16 head=[31,31,31,31] tail=[31,31]",
+      "bShouldSee": "Int8Array length=16 byteLength=16 head=[31,31,31,31] tail=[31,31]"
+    },
+    {
+      "id": "t-u8-vs-u16",
+      "group": "typed",
+      "desc": "Uint8Array([1,1]) vs Uint16Array([257]), same bytes",
+      "status": "SEPARATE",
+      "aSeen": "Uint8Array length=2 byteLength=2 head=[1,1] tail=[1,1]",
+      "bSeen": "Uint16Array length=1 byteLength=2 head=[1,1] tail=[1,1]",
+      "bShouldSee": "Uint16Array length=1 byteLength=2 head=[1,1] tail=[1,1]"
+    },
+    {
+      "id": "t-u8-vs-arraybuffer",
+      "group": "typed",
+      "desc": "Uint8Array vs ArrayBuffer, same bytes",
+      "status": "SEPARATE",
+      "aSeen": "Uint8Array length=16 byteLength=16 head=[32,32,32,32] tail=[32,32]",
+      "bSeen": "ArrayBuffer byteLength=16 head=[32,32,32,32] tail=[32,32]",
+      "bShouldSee": "ArrayBuffer byteLength=16 head=[32,32,32,32] tail=[32,32]"
+    },
+    {
+      "id": "t-u8-vs-buffer",
+      "group": "typed",
+      "desc": "Uint8Array vs Node Buffer, same bytes",
+      "status": "SEPARATE",
+      "aSeen": "Uint8Array length=16 byteLength=16 head=[33,33,33,33] tail=[33,33]",
+      "bSeen": "Object keys=type,data json={\"type\":\"Buffer\",\"data\":[33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33]}",
+      "bShouldSee": "Buffer length=16 byteLength=16 head=[33,33,33,33] tail=[33,33]"
+    },
+    {
+      "id": "t-f32",
+      "group": "typed",
+      "desc": "Float32Array([1]) vs ([2])",
+      "status": "SEPARATE",
+      "aSeen": "Float32Array length=1 byteLength=4 head=[0,0,128,63] tail=[128,63]",
+      "bSeen": "Float32Array length=1 byteLength=4 head=[0,0,0,64] tail=[0,64]",
+      "bShouldSee": "Float32Array length=1 byteLength=4 head=[0,0,0,64] tail=[0,64]"
+    },
+    {
+      "id": "t-u8-trailing-zero",
+      "group": "typed",
+      "desc": "Uint8Array([61,62,63]) (3 bytes) vs Uint8Array([61,62,63,0]) (4 bytes: same plus one trailing zero byte)",
+      "status": "SHARED-WRONG",
+      "aSeen": "Uint8Array length=3 byteLength=3 head=[61,62,63] tail=[62,63]",
+      "bSeen": "Uint8Array length=3 byteLength=3 head=[61,62,63] tail=[62,63]",
+      "bShouldSee": "Uint8Array length=4 byteLength=4 head=[61,62,63,0] tail=[63,0]"
+    },
+    {
+      "id": "t-view-offset",
+      "group": "typed",
+      "desc": "same 4 visible bytes: standalone array vs a view at offset 2 of a larger buffer",
+      "status": "SHARED",
+      "aSeen": "Uint8Array length=4 byteLength=4 head=[1,2,3,4] tail=[3,4]",
+      "bSeen": "Uint8Array length=4 byteLength=4 head=[1,2,3,4] tail=[3,4]",
+      "bShouldSee": "Uint8Array length=4 byteLength=4 head=[1,2,3,4] tail=[3,4]"
+    },
+    {
+      "id": "f-blob-bytes",
+      "group": "file",
+      "desc": "Blob: different bytes, same type",
+      "status": "SEPARATE",
+      "aSeen": "File size=16 type=\"text/plain\" name=\"blob\" lastModified=1794547221368 head=[1,1,1,1] tail=[1,1]",
+      "bSeen": "File size=16 type=\"text/plain\" name=\"blob\" lastModified=1794547221374 head=[2,2,2,2] tail=[2,2]",
+      "bShouldSee": "Blob size=16 type=\"text/plain\" name=- lastModified=- head=[2,2,2,2] tail=[2,2]"
+    },
+    {
+      "id": "f-blob-type",
+      "group": "file",
+      "desc": "Blob: same bytes, type text/a vs text/b",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=16 type=\"text/a\" name=\"blob\" lastModified=1794547221379 head=[21,21,21,21] tail=[21,21]",
+      "bSeen": "File size=16 type=\"text/a\" name=\"blob\" lastModified=1794547221379 head=[21,21,21,21] tail=[21,21]",
+      "bShouldSee": "Blob size=16 type=\"text/b\" name=- lastModified=- head=[21,21,21,21] tail=[21,21]"
+    },
+    {
+      "id": "f-blob-empty-type",
+      "group": "file",
+      "desc": "Blob: empty, type '' vs 'text/plain'",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=0 type=\"\" name=\"blob\" lastModified=1794547221390 head=[] tail=[]",
+      "bSeen": "File size=0 type=\"\" name=\"blob\" lastModified=1794547221390 head=[] tail=[]",
+      "bShouldSee": "Blob size=0 type=\"text/plain\" name=- lastModified=- head=[] tail=[]"
+    },
+    {
+      "id": "f-blob-last-byte",
+      "group": "file",
+      "desc": "Blob(200000 bytes) differing only in the LAST byte",
+      "status": "SEPARATE",
+      "aSeen": "File size=200000 type=\"\" name=\"blob\" lastModified=1794547221402 head=[1,1,1,1] tail=[1,1]",
+      "bSeen": "File size=200000 type=\"\" name=\"blob\" lastModified=1794547221420 head=[1,1,1,1] tail=[1,2]",
+      "bShouldSee": "Blob size=200000 type=\"\" name=- lastModified=- head=[1,1,1,1] tail=[1,2]"
+    },
+    {
+      "id": "f-file-bytes",
+      "group": "file",
+      "desc": "File: different bytes, same name and type",
+      "status": "SEPARATE",
+      "aSeen": "File size=16 type=\"text/plain\" name=\"same.bin\" lastModified=1794547221436 head=[41,41,41,41] tail=[41,41]",
+      "bSeen": "File size=16 type=\"text/plain\" name=\"same.bin\" lastModified=1794547221444 head=[42,42,42,42] tail=[42,42]",
+      "bShouldSee": "File size=16 type=\"text/plain\" name=\"same.bin\" lastModified=1794547221449 head=[42,42,42,42] tail=[42,42]"
+    },
+    {
+      "id": "f-file-name",
+      "group": "file",
+      "desc": "File: same bytes, name alice.pdf vs bob.pdf",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=16 type=\"\" name=\"alice.pdf\" lastModified=1794547221452 head=[22,22,22,22] tail=[22,22]",
+      "bSeen": "File size=16 type=\"\" name=\"alice.pdf\" lastModified=1794547221452 head=[22,22,22,22] tail=[22,22]",
+      "bShouldSee": "File size=16 type=\"\" name=\"bob.pdf\" lastModified=1794547221465 head=[22,22,22,22] tail=[22,22]"
+    },
+    {
+      "id": "f-file-type",
+      "group": "file",
+      "desc": "File: same bytes and name, type text/a vs text/b",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=16 type=\"text/a\" name=\"same.bin\" lastModified=1794547221467 head=[23,23,23,23] tail=[23,23]",
+      "bSeen": "File size=16 type=\"text/a\" name=\"same.bin\" lastModified=1794547221467 head=[23,23,23,23] tail=[23,23]",
+      "bShouldSee": "File size=16 type=\"text/b\" name=\"same.bin\" lastModified=1794547221477 head=[23,23,23,23] tail=[23,23]"
+    },
+    {
+      "id": "f-file-lastmod",
+      "group": "file",
+      "desc": "File: same bytes and name, lastModified 1000 vs 2000",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=16 type=\"\" name=\"same.bin\" lastModified=1000 head=[24,24,24,24] tail=[24,24]",
+      "bSeen": "File size=16 type=\"\" name=\"same.bin\" lastModified=1000 head=[24,24,24,24] tail=[24,24]",
+      "bShouldSee": "File size=16 type=\"\" name=\"same.bin\" lastModified=2000 head=[24,24,24,24] tail=[24,24]"
+    },
+    {
+      "id": "f-blob-trailing-zero",
+      "group": "file",
+      "desc": "Blob([71,72,73]) (3 bytes) vs Blob([71,72,73,0]) (4 bytes: same plus one trailing zero byte)",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=3 type=\"\" name=\"blob\" lastModified=1794547221493 head=[71,72,73] tail=[72,73]",
+      "bSeen": "File size=3 type=\"\" name=\"blob\" lastModified=1794547221493 head=[71,72,73] tail=[72,73]",
+      "bShouldSee": "Blob size=4 type=\"\" name=- lastModified=- head=[71,72,73,0] tail=[73,0]"
+    },
+    {
+      "id": "f-file-trailing-zero",
+      "group": "file",
+      "desc": "File([81,82,83]) (3 bytes) vs File([81,82,83,0]) (4 bytes), same name and type",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=3 type=\"\" name=\"z.bin\" lastModified=1794547221504 head=[81,82,83] tail=[82,83]",
+      "bSeen": "File size=3 type=\"\" name=\"z.bin\" lastModified=1794547221504 head=[81,82,83] tail=[82,83]",
+      "bShouldSee": "File size=4 type=\"\" name=\"z.bin\" lastModified=1794547221514 head=[81,82,83,0] tail=[83,0]"
+    },
+    {
+      "id": "f-blob-vs-file",
+      "group": "file",
+      "desc": "Blob vs File with the same bytes",
+      "status": "SHARED-WRONG",
+      "aSeen": "File size=16 type=\"\" name=\"blob\" lastModified=1794547221521 head=[25,25,25,25] tail=[25,25]",
+      "bSeen": "File size=16 type=\"\" name=\"blob\" lastModified=1794547221521 head=[25,25,25,25] tail=[25,25]",
+      "bShouldSee": "File size=16 type=\"\" name=\"x.bin\" lastModified=1794547221538 head=[25,25,25,25] tail=[25,25]"
+    },
+    {
+      "id": "x-class",
+      "group": "opaque",
+      "desc": "class instance 1 vs 2 (function ignores it)",
+      "status": "SHARED",
+      "aSeen": "not read",
+      "bSeen": "not read",
+      "bShouldSee": "not read"
+    },
+    {
+      "id": "x-function",
+      "group": "opaque",
+      "desc": "() => 1 vs () => 2 (function ignores it)",
+      "status": "SHARED",
+      "aSeen": "not read",
+      "bSeen": "not read",
+      "bShouldSee": "not read"
+    },
+    {
+      "id": "x-regexp",
+      "group": "opaque",
+      "desc": "/a/ vs /b/ (function ignores it)",
+      "status": "SHARED",
+      "aSeen": "not read",
+      "bSeen": "not read",
+      "bShouldSee": "not read"
+    },
+    {
+      "id": "x-symbol-local",
+      "group": "opaque",
+      "desc": "Symbol('a') vs Symbol('b') (function ignores it)",
+      "status": "SHARED",
+      "aSeen": "not read",
+      "bSeen": "not read",
+      "bShouldSee": "not read"
+    },
+    {
+      "id": "x-symbol-registered",
+      "group": "opaque",
+      "desc": "Symbol.for('a') vs Symbol.for('b') (function ignores it)",
+      "status": "SHARED",
+      "aSeen": "not read",
+      "bSeen": "not read",
+      "bShouldSee": "not read"
+    },
+    {
+      "id": "s-long-last-char",
+      "group": "string",
+      "desc": "100000-char string differing only in the LAST character",
+      "status": "SEPARATE",
+      "aSeen": "string:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... (100008 chars)",
+      "bSeen": "string:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... (100008 chars)",
+      "bShouldSee": "string:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... (100008 chars)"
+    }
+  ],
+  "closure": [
+    {
+      "kind": "cls",
+      "mode": "ref",
+      "status": "ERROR",
+      "error": "Only plain objects, and a few built-ins, can be passed to Client Components from Server Components. Classes or null prototypes are not supported.\n  [\"ref\", {n: ",
+      "serverError": ""
+    },
+    {
+      "kind": "fn",
+      "mode": "ref",
+      "status": "ERROR",
+      "error": "Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with \"use server\". Or maybe you meant to call this functi",
+      "serverError": ""
+    },
+    {
+      "kind": "re",
+      "mode": "ref",
+      "status": "ERROR",
+      "error": "Only plain objects, and a few built-ins, can be passed to Client Components from Server Components. Classes or null prototypes are not supported.\n  [\"ref\", RegE",
+      "serverError": ""
+    },
+    {
+      "kind": "symlocal",
+      "mode": "ref",
+      "status": "ERROR",
+      "error": "Only global symbols received from Symbol.for(...) can be passed to Client Components. The symbol Symbol.for(A) cannot be found among global symbols.\n  [\"ref\", S",
+      "serverError": ""
+    },
+    {
+      "kind": "symreg",
+      "mode": "ref",
+      "status": "SHARED"
+    },
+    {
+      "kind": "url",
+      "mode": "ref",
+      "status": "SEPARATE"
+    },
+    {
+      "kind": "date",
+      "mode": "ref",
+      "status": "SEPARATE"
+    },
+    {
+      "kind": "map",
+      "mode": "ref",
+      "status": "SEPARATE"
+    },
+    {
+      "kind": "set",
+      "mode": "ref",
+      "status": "SEPARATE"
+    },
+    {
+      "kind": "plain",
+      "mode": "ref",
+      "status": "SEPARATE"
+    },
+    {
+      "kind": "cls",
+      "mode": "read",
+      "status": "ERROR",
+      "error": "Only plain objects, and a few built-ins, can be passed to Client Components from Server Components. Classes or null prototypes are not supported.\n  [\"read\", {n:",
+      "serverError": ""
+    },
+    {
+      "kind": "fn",
+      "mode": "read",
+      "status": "ERROR",
+      "error": "Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with \"use server\". Or maybe you meant to call this functi",
+      "serverError": ""
+    },
+    {
+      "kind": "re",
+      "mode": "read",
+      "status": "ERROR",
+      "error": "Only plain objects, and a few built-ins, can be passed to Client Components from Server Components. Classes or null prototypes are not supported.\n  [\"read\", Reg",
+      "serverError": ""
+    },
+    {
+      "kind": "symlocal",
+      "mode": "read",
+      "status": "ERROR",
+      "error": "Only global symbols received from Symbol.for(...) can be passed to Client Components. The symbol Symbol.for(A) cannot be found among global symbols.\n  [\"read\", ",
+      "serverError": ""
+    },
+    {
+      "kind": "symreg",
+      "mode": "read",
+      "status": "ERROR",
+      "error": "An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is",
+      "serverError": "\u2a2f Error: Cannot access constructor on the server. You cannot dot into a temporary client reference from a server component. You can only pass the value through to the client."
+    },
+    {
+      "kind": "url",
+      "mode": "read",
+      "status": "SEPARATE",
+      "seen": "string:String"
+    },
+    {
+      "kind": "date",
+      "mode": "read",
+      "status": "SEPARATE",
+      "seen": "object:Date"
+    },
+    {
+      "kind": "map",
+      "mode": "read",
+      "status": "SEPARATE",
+      "seen": "object:Map"
+    },
+    {
+      "kind": "set",
+      "mode": "read",
+      "status": "SEPARATE",
+      "seen": "object:Set"
+    },
+    {
+      "kind": "plain",
+      "mode": "read",
+      "status": "SEPARATE",
+      "seen": "object:Object"
+    }
+  ],
+  "limits": {
+    "u8": {
+      "maxOk": 246883,
+      "firstFail": 246884,
+      "unit": "bytes",
+      "approxBytes": 246883
+    },
+    "u16": {
+      "maxOk": 123441,
+      "firstFail": 123442,
+      "unit": "elements",
+      "approxBytes": 246882
+    },
+    "f64": {
+      "maxOk": 30860,
+      "firstFail": 30861,
+      "unit": "elements",
+      "approxBytes": 246880
+    },
+    "buf": {
+      "maxOk": 999999,
+      "firstFail": 1000000,
+      "unit": "bytes",
+      "approxBytes": 999999
+    },
+    "str": {
+      "maxOk": 999929,
+      "firstFail": 999930,
+      "unit": "characters",
+      "approxBytes": 999929
+    },
+    "blob": {
+      "maxOk": 246883,
+      "firstFail": 246884,
+      "unit": "bytes",
+      "approxBytes": 246883
+    }
+  }
+}

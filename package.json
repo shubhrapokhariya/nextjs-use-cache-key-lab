@@ -1,0 +1,21 @@
+{
+  "name": "nextjs-use-cache-key-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reproducible experiments: what goes into a Next.js `use cache` key",
+  "type": "module",
+  "engines": {
+    "node": ">=20.9"
+  },
+  "scripts": {
+    "quick": "node run.mjs --versions=16.4.4,16.4.5,16.4.6",
+    "full": "node run.mjs --versions=16.0.0,16.1.0,16.1.7,16.2.0,16.2.12,16.3.0,16.3.8,16.4.0,16.4.3,16.4.4,16.4.5,16.4.6",
+    "limits": "node run.mjs --versions=16.4.6 --only=limits --warm --stack=500,984,2000",
+    "summarize": "node summarize.mjs",
+    "diagnose": "node diagnose.mjs",
+    "demo": "node run.mjs --versions=16.4.4,16.4.5 --only=demo",
+    "keys": "node run.mjs --versions=16.4.4,16.4.5 --only=keys",
+    "action": "node run.mjs --versions=16.4.4,16.4.5,16.4.6 --only=action",
+    "workaround": "node run.mjs --versions=16.4.4,16.4.5,16.4.6 --only=workaround"
+  }
+}

@@ -1,0 +1,12 @@
+# dependencies, installed Next.js versions and local results
+node_modules/
+/.work/
+/results/
+
+# private writing files, not part of the lab
+ARTICLE.md
+VERIFY.md
+
+# OS files
+.DS_Store
+Thumbs.db
